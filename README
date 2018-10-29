@@ -1,0 +1,29 @@
+Tim Schisler
+University of Missouri - St. Louis
+CS 5420 Fall 2018
+Assignment 3: Image Enhancement in Spatial Domain
+10/28/2018
+
+For this assignment, I have answered each question 1-6 with a corresponding
+executable named Q1,...,Q6.  Feel free to e.g. `make Q2`, or just call
+`make all` to build them all at once.  Calling any of the executables with no
+arguments should prompt a usage message for further info.  The usual
+`make clean` will clean up after any compilation this assignment requires.
+
+I wrote, compiled, and tested all of this assignment's code directly on the
+Hoare server.  This project uses git for version control; call `git log` to
+view a history of commits.
+
+The assignment is as follows:
+
+1. Write a program that will show the pixel value at a mouse click. You will need to find the location of the mouse and display the pixel value at that location when the user presses the left mouse button. For a color image, print all the three values; for a grayscale image, print the grayscale intensity. Use addText to overlay the text on the image.
+
+2. You have already written functions to compute mean and standard deviation of an image. Use the mean value to threshold the image such that all the pixels below the mean value are changed to black and all the other pixels are changed to white. Apply this to a gray scale image and provide the result. Also apply this function to each channel of the color image and see the result. In the color image, you will take the mean of each channel and use that to threshold the channel. You may use the split function to get individual channels. Merge the thresholded channels and display the result.
+
+3. Write a program to perform histogram equalization on a specified image. If it is a color image, perform the histogram equalization on each of the three components separately. Also convert the image to grayscale and perform histogram equalization. It will be nice to write histogram equalization as a function and call it by specifying a channel as an M × N array of integers.
+
+4. Write a program to perform histogram matching of a given image to another image, or a specified histogram. The histogram will be specified as a set of 256 integer values in a file, one value per line. This histogram can also be computed from a different (reference) image. You should use an option on command line to specify whether the histogram is a precomputed file or an image.
+
+5. Write a function to specify a region of interest (ROI) in an image. The ROI should be specified as a rectangular area with a starting row and column number and the width and height of the rectangle. You can use the OpenCV built-in function to specify the ROI. Run the histogram equalization function on this ROI and put it back into the original image. Display the image with equalized ROI. It will be nice to use the mouse to specify the ROI.
+
+6. Subtract an image from its histogram equalized image and display the result. If the user specifies an ROI on the command line, perform the equalization and subtraction only in the ROI part of the image.
