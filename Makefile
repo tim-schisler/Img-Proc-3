@@ -26,7 +26,7 @@ OBJ6	= q6.o
 
 OBJC = HW3.o
 
-#OUTS =
+OUTS = Q2out.jpg
 
 LIBS	= `pkg-config --libs opencv`
 STD	= -std=c++11
@@ -57,4 +57,4 @@ $(TARGET6): $(OBJ6) $(OBJC)
 
 .PHONY: clean
 clean:
-	/bin/rm -f *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5) $(TARGET6); # $(OUTS)
+	/bin/rm -f *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5) $(TARGET6) $(OUTS)

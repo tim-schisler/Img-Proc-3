@@ -3,18 +3,41 @@ Tim Schisler
 University of Missouri - St. Louis
 CS 5420 Fall 2018
 Assignment 3: Image Enhancement in Spatial Domain
-10/24/2018
+10/29/2018
 */
 /*
   Q1.CPP:
 */
 
 #include <iostream>
+#include <string>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "HW3.h"
 
+const char * DISPLAY = "Click For Pixel Value";
+
+//Prepare the mouse click handling.
+cv::MouseCallback mouseCall (int event, int x, int y, int flags, void *userdata) {
+  switch (event) {
+  case cv::EVENT_LBUTTONDOWN:
+    std::string text = "ROW " + y + "\nCOL " + x + "\n";
+
+    //differentiate between greyscale and color images
+    if( ((cv::Mat *)(userdata))->channels() > 1 ) {
+      cv::Vec3b clrPxl = ((cv::Mat *)(userdata))->at<cv::Vec3b>(y,x);
+      text += ("B " + clrPxl[0] + "\nG " + clrPxl[1] + "\nR " + clrPxl[2]);
+    }
+    else {
+      int gryPxl = ((cv::Mat *)(userdata))->at<uchar>(y,x);
+      text += ("value " + gryPxl);
+    }
+
+    cv::addText(((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica"));
+    break;
+  }
+}
 
 int main(int argc, char *argv[]) {
 
@@ -24,7 +47,17 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
+  //Open image from command line argument.
+  cv::Mat clrImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR );
+  if ( clrImg.empty() ) {
+    std::cerr << "Unable to open picture file " << argv[1] << std::endl;
+    return -1;
+  }
 
+  cv::namedWindow ( DISPLAY );
+  cv::setMouseCallback( DISPLAY, mouseCall, ((void *)(&clrImg)) );
+  cv::imshow ( DISPLAY, clrImg );
+  cv::waitKey ( 0 );
 
   return 0;
 }
