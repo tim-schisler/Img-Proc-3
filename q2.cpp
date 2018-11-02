@@ -11,6 +11,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -41,11 +42,11 @@ int main(int argc, char *argv[]) {
   std::string thrshImgName = "Q2out.jpg";
   cv::imwrite(thrshImgName, thrshImg);
 
-  /*
+//  /*
   cv::namedWindow ( DISPLAY );
   cv::imshow ( DISPLAY, thrshImg );
   cv::waitKey ( 0 );
-  */
+//  */
 
   return 0;
 }

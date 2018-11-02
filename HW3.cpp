@@ -12,38 +12,48 @@ Assignment 3: Image Enhancement in Spatial Domain
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 
-void imgAvg(const cv::Mat *img, double *avg) {
-
-  long int acc[3];
-  int n = img->cols * img->rows;
-
-  for(int c = 0; c < img->cols; c++) {
-    for(int r = 0; r < img->rows; r++) {
-      cv::Vec3b clrPxl = img->at<cv::Vec3b>(r,c);
-      for (int ch = 0; ch < 3; ch++) {
-        acc[ch] += clrPxl[ch];
-      }
-    }
-  }
-
-  for(int channel = 0; channel < 3; channel++)
-    avg[channel] = (double)acc[channel] / (double)n;
-
-}
 
 void thresholdByChannel(const cv::Mat *usrImg, cv::Mat *thrshImg) {
 
   //Prepare for thresholding
-  *thrshImg = cv::Mat::zeros(usrImg->rows, usrImg->cols, CV_8UC1);
-  double avgs[3];
-  imgAvg(usrImg, avgs);
+  int c = usrImg->channels();
+  double avgs[c];
+  long int acc[c];
+
+  std::vector<cv::Mat> imgChan;
+  if (c > 1) {
+    cv::split(*usrImg, imgChan);
+  } else {
+    imgChan[0] = *usrImg;
+  }
+
+  int n = usrImg->cols * usrImg->rows;
+  for (size_t chan = 0; chan < c; chan++)
+    acc[chan] = avgs[chan] = 0;
+
+  for (int ch = 0; ch < c; ch++)
+    for(int col = 0; col < usrImg->cols; col++)
+      for(int rw = 0; rw < usrImg->rows; rw++) {
+        int clrPxl = imgChan[ch].at<uchar>(rw,col);
+        acc[ch] += clrPxl;
+      }
+
+  for(int channel = 0; channel < c; channel++)
+    avgs[channel] = (double)acc[channel] / (double)n;
 
   //Threshold channel by channel
-  for(int c = 0; c < usrImg->cols; c++)
+  for(int col = 0; col < usrImg->cols; col++)
     for(int r = 0; r < usrImg->rows; r++)
-      for(int a = 0; a < 3; a++)
-        if( (double)(usrImg->at<cv::Vec3b>(r,c))[a] >= avgs[a])
-          thrshImg->at<uchar>(r,c) = 255;
+      for(int a = 0; a < c; a++) {
+        if( (double)(imgChan[a].at<uchar>(r,col)) >= avgs[a])
+          imgChan[a].at<uchar>(r,col) = 255;
+        else imgChan[a].at<uchar>(r,col) = 0;
+      }
+
+  if (c > 1) {
+    cv::merge(imgChan, *thrshImg);
+  }
+  else *thrshImg = imgChan[0];
 
 }
 
