@@ -19,7 +19,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 const char * DISPLAY = "Click For Pixel Value";
 
 //Prepare the mouse click handling.
-cv::MouseCallback mouseCall (int event, int x, int y, int flags, void *userdata) {
+static void mouseCall (int event, int x, int y, int flags, void *userdata) {
   switch (event) {
   case cv::EVENT_LBUTTONDOWN:
     std::string text = "ROW:";
@@ -43,7 +43,9 @@ cv::MouseCallback mouseCall (int event, int x, int y, int flags, void *userdata)
       text += std::to_string(gryPxl);
     }
 
-    cv::addText( ((cv::Mat *)(userdata)), &text, cv::Point(0,0), cv::fontQt("Helvetica") );
+
+
+    cv::addText( *((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica") );
     break;
   }
 };
