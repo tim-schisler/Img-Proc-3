@@ -3,7 +3,7 @@ Tim Schisler
 University of Missouri - St. Louis
 CS 5420 Fall 2018
 Assignment 3: Image Enhancement in Spatial Domain
-10/24/2018
+10/31/2018
 */
 /*
   Q4.CPP: performs histogram matching
@@ -18,7 +18,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 
 int main(int argc, char *argv[]) {
 
-
+  
 
 
   return 0;

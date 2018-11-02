@@ -3,7 +3,7 @@ Tim Schisler
 University of Missouri - St. Louis
 CS 5420 Fall 2018
 Assignment 3: Image Enhancement in Spatial Domain
-10/29/2018
+10/31/2018
 */
 /*
   HW3.CPP: source file for functions used in Assignment 3 answer sources.
@@ -31,33 +31,6 @@ void imgAvg(const cv::Mat *img, double *avg) {
 
 }
 
-void stats(const cv::Mat *img, double *avg, double *sd, int *frq, double *relFrq) {
-  //First pass: record frequencies and sum pixel values
-  long int acc = 0;
-  int n = img->cols * img->rows;
-  for(int c = 0; c < img->cols; c++)
-    for(int r = 0; r < img->rows; r++) {
-      int pxl = (int)img->at<uchar>(r,c);
-      acc += pxl;
-      frq[pxl] += 1;
-    }
-  //compute average
-  *avg = (double)acc / (double)n;
-  //compute relative frequencies
-  for(int j = 0; j < 256; j++) {
-    relFrq[j] = (double)frq[j] / (double)n;
-  }
-  //Second pass: record deviation for each pixel and sum the variance
-  double devAcc = 0.0;
-  for(int c = 0; c < img->cols; c++)
-    for(int r = 0; r < img->rows; r++) {
-      double pxl = (double)(img->at<uchar>(r,c));
-      devAcc += ( pow( (pxl - *avg), 2.0 ) * relFrq[(unsigned char)pxl] );
-    }
-  //compute standard deviation from the accumulated variance
-  *sd = pow(devAcc, 0.5);
-}
-
 void thresholdByChannel(const cv::Mat *usrImg, cv::Mat *thrshImg) {
 
   //Prepare for thresholding
@@ -74,26 +47,32 @@ void thresholdByChannel(const cv::Mat *usrImg, cv::Mat *thrshImg) {
 
 }
 
-void histEq(const cv::Mat *usrImg, std::vector<cv::Mat>hstImg, int *c) {
+void histEq(const cv::Mat *usrImg, std::vector<cv::Mat> *hstImg, int *c) {
 
   *c = usrImg->channels();
   if (*c > 1) {
-    cv::split(*usrImg, hstImg);
+    cv::split(*usrImg, *hstImg);
   } else {
-    hstImg[0] = *usrImg;
+    (*hstImg)[0] = *usrImg;
   }
 
 
-  int frqncy[*c][256],
+  long int frqncy[*c][256],
       LUT[*c][256];
-  double cdf[*c][256],
+  long double cdf[*c][256],
          rltvFrqncy[*c][256];
+  //Initialize the arrays
+  for (size_t chan = 0; chan < *c; chan++)
+    for (size_t val = 0; val < 256; val++) {
+      frqncy[chan][val] = LUT[chan][val] = 0;
+      cdf[chan][val] = rltvFrqncy[chan][val] = 0.0;
+    }
 
-  //compute the relative frequencies
+  //compute the frequencies
   for (size_t chan = 0; chan < *c; chan++)
     for (size_t rw = 0; rw < usrImg->rows; rw++)
       for (size_t clm = 0; clm < usrImg->cols; clm++) {
-        int pxl = hstImg[chan].at<uchar>(rw,clm);
+        int pxl = (*hstImg)[chan].at<uchar>(rw,clm);
         frqncy[chan][pxl] += 1;
       }
   //compute the cdfs and complete the lookup table
@@ -114,7 +93,7 @@ void histEq(const cv::Mat *usrImg, std::vector<cv::Mat>hstImg, int *c) {
   for (size_t chan = 0; chan < *c; chan++)
     for (size_t rw = 0; rw < usrImg->rows; rw++)
       for (size_t clm = 0; clm < usrImg->cols; clm++) {
-        hstImg[chan].at<uchar>(rw,clm) = LUT[chan][ hstImg[chan].at<uchar>(rw,clm) ];
+        (*hstImg)[chan].at<uchar>(rw,clm) = LUT[chan][ (*hstImg)[chan].at<uchar>(rw,clm) ];
       }
-  if(*c > 1) cv::merge(hstImg, hstImg[*c]);
+  //if(*c > 1) cv::merge(*hstImg, (*hstImg)[*c]);
 }
