@@ -6,7 +6,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 10/24/2018
 */
 /*
-  Q6.CPP:
+  Q6.CPP: subtracts an image from its histogram-equalized self.
 */
 
 #include <iostream>

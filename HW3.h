@@ -11,5 +11,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 
 #include <opencv2/core/core.hpp>
 
+void stats(const cv::Mat *, double *, double *, int *, double *);
 void imgAvg(const cv::Mat *, double *);
 void thresholdByChannel(const cv::Mat *, cv::Mat *);
+void histEq(const cv::Mat *, std::vector<cv::Mat>, int *);

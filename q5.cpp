@@ -6,7 +6,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 10/24/2018
 */
 /*
-  Q5.CPP:
+  Q5.CPP: performs histogram equalization on a region of interest
 */
 
 #include <iostream>

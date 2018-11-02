@@ -6,7 +6,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 10/24/2018
 */
 /*
-  Q4.CPP:
+  Q4.CPP: performs histogram matching
 */
 
 #include <iostream>

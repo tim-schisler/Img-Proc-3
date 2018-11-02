@@ -2,7 +2,7 @@
 #University of Missouri - St. Louis
 #CS 5420 Fall 2018
 #Assignment 3: Image Enhancement in Spatial Domain
-#10/24/2018
+#10/29/2018
 CC	= g++
 CFLAGS = -g `pkg-config --cflags opencv`
 

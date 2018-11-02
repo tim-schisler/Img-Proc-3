@@ -6,7 +6,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 10/29/2018
 */
 /*
-  Q1.CPP:
+  Q1.CPP: shows pixel value at a mouse click
 */
 
 #include <iostream>
@@ -22,22 +22,31 @@ const char * DISPLAY = "Click For Pixel Value";
 cv::MouseCallback mouseCall (int event, int x, int y, int flags, void *userdata) {
   switch (event) {
   case cv::EVENT_LBUTTONDOWN:
-    std::string text = "ROW " + y + "\nCOL " + x + "\n";
+    std::string text = "ROW:";
+    text.append(std::to_string(y));
+    text.append("  COL:");
+    text.append(std::to_string(x));
 
     //differentiate between greyscale and color images
     if( ((cv::Mat *)(userdata))->channels() > 1 ) {
       cv::Vec3b clrPxl = ((cv::Mat *)(userdata))->at<cv::Vec3b>(y,x);
-      text += ("B " + clrPxl[0] + "\nG " + clrPxl[1] + "\nR " + clrPxl[2]);
+      text += "  B:";
+      text += std::to_string(clrPxl[0]);
+      text += "  G:";
+      text += std::to_string(clrPxl[1]);
+      text += "  R:";
+      text += std::to_string(clrPxl[2]);
     }
     else {
       int gryPxl = ((cv::Mat *)(userdata))->at<uchar>(y,x);
-      text += ("value " + gryPxl);
+      text += "  value:";
+      text += std::to_string(gryPxl);
     }
 
-    cv::addText(((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica"));
+    cv::addText( ((cv::Mat *)(userdata)), &text, cv::Point(0,0), cv::fontQt("Helvetica") );
     break;
   }
-}
+};
 
 int main(int argc, char *argv[]) {
 

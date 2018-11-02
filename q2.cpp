@@ -6,7 +6,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 10/29/2018
 */
 /*
-  Q2.CPP: thresholding an image at the average value channel-by-channel.
+  Q2.CPP: thresholds an image at the average value channel-by-channel.
 */
 
 #include <iostream>
