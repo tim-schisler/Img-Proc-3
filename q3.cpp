@@ -26,7 +26,9 @@ int main(int argc, char *argv[]) {
   }
 
   //Open image from command line argument.
-  cv::Mat inputImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR ), cvtHistImg;
+  cv::Mat inputImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR ),
+          cvtHistImg,
+          addHistImg;
   std::vector<cv::Mat> histImg;
   if ( inputImg.empty() ) {
     std::cerr << "Unable to open picture file " << argv[1] << std::endl;
@@ -35,18 +37,23 @@ int main(int argc, char *argv[]) {
 
   int ch, dummych;
   histEq(&inputImg, &histImg, &ch);
+  if (ch > 1) {
+    cv::merge(histImg, addHistImg);
+  }
   /*
   if (ch > 1) {
     cv::cvtColor(inputImg, cvtHistImg, cv::COLOR_BGR2GRAY);
     histEq(&cvtHistImg[0], cvtHistImg, &dummych);
   }
   */
+  cv::imshow("Original", inputImg);
   for(size_t c = 0; c < ch; c++) {
     std::string title = "Channel ";
     title += std::to_string(c);
     cv::namedWindow ( title );
     cv::imshow ( title, histImg[c] );
   }
+  cv::imshow("Sum of Channels", addHistImg);
   cv::waitKey(0);
 
   return 0;
