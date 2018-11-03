@@ -43,8 +43,6 @@ static void mouseCall (int event, int x, int y, int flags, void *userdata) {
       text += std::to_string(gryPxl);
     }
 
-
-
     cv::addText( *((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica") );
     break;
   }
