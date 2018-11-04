@@ -107,3 +107,41 @@ void histEq(const cv::Mat *usrImg, std::vector<cv::Mat> *hstImg, int *c) {
       }
   //if(*c > 1) cv::merge(*hstImg, (*hstImg)[*c]);
 }
+
+void simpleHist(const cv::Mat *img, int *freq) {
+  //Initialize the histogram array.
+  for (size_t i = 0; i < 256; i++) {
+    freq[i] = 0;
+  }
+  //Parse the image pixels and fill the histogram bins.
+  for (size_t r = 0; r < img->rows; r++) {
+    for (size_t c = 0; c < img->cols; c++) {
+      int pxl = img->at<uchar>(r,c);
+      freq[pxl] += 1;
+    }
+  }
+}
+
+static void cdf(int *freq, int sz, double *h) {
+  int n = 0;
+  for (size_t i = 0; i < sz; i++) n += freq[i];
+  for (size_t j = 0; j < sz; j++) h[j] = (double)freq[j] / (double)n;
+  for (size_t k = 1; k < sz; k++)  h[k] += h[k-1];
+}
+
+void simpleLUT(int *src, int *ref, int *dst) {
+
+  //Compute CDFs.
+  double hst[2][256];
+  cdf(src, 256, hst[0]);
+  cdf(ref, 256, hst[1]);
+
+  //Compute the lookup table.
+  for (int l = 0; l < 256; l++) {
+    int lprime = 255;
+    do {
+      dst[l] = lprime;
+      lprime -= 1;
+    } while(lprime >= 0 && hst[0][lprime] > hst[1][l]);
+  }
+}

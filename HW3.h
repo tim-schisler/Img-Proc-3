@@ -17,5 +17,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 
 void thresholdByChannel(const cv::Mat *, cv::Mat *);
 void histEq(const cv::Mat *, std::vector<cv::Mat> *, int *);
+void simpleHist(const cv::Mat *, int *);
+void simpleLUT(int *, int *, int *);
 
 #endif
