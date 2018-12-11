@@ -63,7 +63,7 @@ void histEq(const cv::Mat *usrImg, std::vector<cv::Mat> *hstImg, int *c) {
   if (*c > 1) {
     cv::split(*usrImg, *hstImg);
   } else {
-    (*hstImg)[0] = *usrImg;
+    (*hstImg).push_back(*usrImg);
   }
 
 

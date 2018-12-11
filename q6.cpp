@@ -10,6 +10,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 */
 
 #include <iostream>
+#include <vector>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -25,8 +26,9 @@ int main(int argc, char *argv[]) {
   }
 
   //Open image from command line argument.
-  cv::Mat inImg = cv::imread ( argv[1], cv::IMREAD_GRAYSCALE ),
-          subImg;
+  cv::Mat inImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR ),
+          subImg(inImg.rows, inImg.cols, CV_8UC1),
+		  mergeHistImg;
   if ( inImg.empty() ) {
     std::cerr << "Unable to open picture file " << argv[1] << std::endl;
     return -1;
@@ -38,6 +40,14 @@ int main(int argc, char *argv[]) {
   histEq(&inImg, &histImg, &ch);
 
   //Perform the subtraction.
+  if (ch > 1) {
+    cv::merge(histImg, mergeHistImg);
+    cvtColor(mergeHistImg, mergeHistImg, CV_RGB2GRAY);
+  }
+  else {
+	mergeHistImg = histImg[0];
+  } 
+  cvtColor(inImg, inImg, CV_RGB2GRAY);
   for (int r = 0; r < inImg.rows; r++) {
     for (int c = 0; c < inImg.cols; c++) {
       int subPxl = histImg[0].at<uchar>(r,c) - inImg.at<uchar>(r,c);
@@ -48,7 +58,9 @@ int main(int argc, char *argv[]) {
   }
 
   //Show the result.
-  cv::imshow("Subtracted from histogram equalized image.", subImg);
+  cv::imshow("Input image", inImg);
+  cv::imshow("Histogram equalized image", inImg);
+  cv::imshow("Input subtracted from histogram equalized image", subImg);
   cv::waitKey(0);
 
   return 0;
