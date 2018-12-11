@@ -17,6 +17,7 @@ Assignment 3: Image Enhancement in Spatial Domain
 #include "HW3.h"
 
 const char * DISPLAY = "Click For Pixel Value";
+cv::Mat clrImg;
 
 //Prepare the mouse click handling.
 static void mouseCall (int event, int x, int y, int flags, void *userdata) {
@@ -28,8 +29,8 @@ static void mouseCall (int event, int x, int y, int flags, void *userdata) {
     text.append(std::to_string(x));
 
     //differentiate between greyscale and color images
-    if( ((cv::Mat *)(userdata))->channels() > 1 ) {
-      cv::Vec3b clrPxl = ((cv::Mat *)(userdata))->at<cv::Vec3b>(y,x);
+    if( clrImg.channels() > 1 ) {
+      cv::Vec3b clrPxl = clrImg.at<cv::Vec3b>(y,x);
       text += "  B:";
       text += std::to_string(clrPxl[0]);
       text += "  G:";
@@ -38,12 +39,17 @@ static void mouseCall (int event, int x, int y, int flags, void *userdata) {
       text += std::to_string(clrPxl[2]);
     }
     else {
-      int gryPxl = ((cv::Mat *)(userdata))->at<uchar>(y,x);
+      int gryPxl = clrImg.at<uchar>(y,x);
       text += "  value:";
       text += std::to_string(gryPxl);
     }
 
-    cv::addText( *((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica") );
+    //cv::addText( *((cv::Mat *)(userdata)), text, cv::Point(0,0), cv::fontQt("Helvetica") );
+	//cv::displayOverlay(DISPLAY, text, 1500);
+	cv::Mat tmp;
+	clrImg.copyTo(tmp);
+	cv::putText(tmp, text, cv::Point(20,20), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.0, cv::Scalar::all(255));
+	cv::imshow ( DISPLAY, tmp );
     break;
   }
 };
@@ -57,14 +63,14 @@ int main(int argc, char *argv[]) {
   }
 
   //Open image from command line argument.
-  cv::Mat clrImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR );
+  clrImg = cv::imread ( argv[1], cv::IMREAD_ANYCOLOR );
   if ( clrImg.empty() ) {
     std::cerr << "Unable to open picture file " << argv[1] << std::endl;
     return -1;
   }
 
   cv::namedWindow ( DISPLAY );
-  cv::setMouseCallback( DISPLAY, mouseCall, ((void *)(&clrImg)) );
+  cv::setMouseCallback( DISPLAY, mouseCall );
   cv::imshow ( DISPLAY, clrImg );
   cv::waitKey ( 0 );
 

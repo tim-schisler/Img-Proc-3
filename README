@@ -2,7 +2,10 @@ Tim Schisler
 University of Missouri - St. Louis
 CS 5420 Fall 2018
 Assignment 3: Image Enhancement in Spatial Domain
-11/02/2018
+12/11/2018
+
+This resubmission corrects errors in questions 1, 4, 5, and 6.
+
 
 For this assignment, I have answered each question 1-6 with a corresponding
 executable named Q1,...,Q6.  Feel free to e.g. `make Q2`, or just call
@@ -13,9 +16,6 @@ arguments should prompt a usage message for further info.  The usual
 I wrote, compiled, and tested all of this assignment's code directly on the
 Hoare server.  This project uses git for version control; call `git log` to
 view a history of commits.
-
-Note that Hoare does not have certain OpenCV features installed, particularly
-the selectROI() function crucial to Q5.
 
 The assignment is as follows:
 
