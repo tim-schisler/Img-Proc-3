@@ -4,7 +4,10 @@ CS 5420 Fall 2018
 Assignment 3: Image Enhancement in Spatial Domain
 12/11/2018
 
-This resubmission corrects errors in questions 1, 4, 5, and 6.
+This resubmission corrects errors in questions 1, 4, 5, and 6.  All programs
+were tested using the image astronaut.jpg found in the basic_prog directory
+provided at the beginning of the semester.  Note that Q5 does not use the mouse.
+Note that Q6 still only works with whole images, not with regions of interest.
 
 
 For this assignment, I have answered each question 1-6 with a corresponding
