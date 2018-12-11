@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
     break;
   case 's': //source, i.e. the image to equalize
     sourceImg = cv::imread(optarg, cv::IMREAD_GRAYSCALE);
+	matchImg = cv::Mat(sourceImg.rows, sourceImg.cols, CV_8UC1);
     sFlag = true;
     break;
   case '?':
@@ -71,8 +72,8 @@ int main(int argc, char *argv[]) {
       fprintf (stderr,
       "Unknown option character `\\x%x'.\n",
       optopt);
-      help(argv[0]);
-      return -1;
+    help(argv[0]);
+    return -1;
   default:
     abort ();
   }
@@ -114,7 +115,9 @@ int main(int argc, char *argv[]) {
   }
 
   cv::namedWindow ( DISPLAY );
+  cv::imshow ( "Source", sourceImg );
   cv::imshow ( DISPLAY, matchImg );
+  if(iFlag) cv::imshow ( "Reference", referenceImg );
   cv::waitKey ( 0 );
 
   return 0;
